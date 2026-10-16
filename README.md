@@ -15,7 +15,7 @@ https://raw.githubusercontent.com/65412222/mangayomi-zh-fork/main/novel_index.js
 https://raw.githubusercontent.com/65412222/mangayomi-zh-fork/main/anime_index.json
 ```
 
-> 注意：首版只有架子 + 中文站重排表 + 探针脚本，索引还是空数组。合入上游 + 拷贝修头版落地后才可导入。
+> 状态：索引已合并（漫画592/中文16，动画97/中文14，小说9/中文0），可导入。拷贝修头版待落地。
 
 ## 目录
 
