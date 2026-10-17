@@ -7,7 +7,7 @@ const mangayomiSources = [{
   "typeSource": "single",
   "itemType": 1,
   "isNsfw": false,
-  "version": "0.0.3",
+  "version": "0.0.4",
   "dateFormat": "",
   "dateFormatLocale": "",
   "pkgPath": "anime/src/zh/fantuan.js"
@@ -128,10 +128,27 @@ class DefaultExtension extends MProvider {
       if (info) desc = info + "\n\n" + desc;
     } catch (e) {}
     const eps = [];
-    for (const a of doc.select("a.btn-episode")) {
-      const href = a.getHref;
-      const name = a.text.trim();
-      if (href && name) eps.push({ name: name, url: href });
+    // 多线路分组：tab-pane id=线路一..六，集名前缀[线路X]（别家扁平写法）
+    try {
+      const panes = doc.select("div.tab-pane[id]");
+      if (panes && panes.length) {
+        for (const pane of panes) {
+          var lineName = "";
+          try { lineName = pane.attr("id").trim(); } catch (e) {}
+          for (const a of pane.select("a.btn-episode")) {
+            const href = a.getHref;
+            const name = a.text.trim();
+            if (href && name) eps.push({ name: (lineName ? "[" + lineName + "] " : "") + name, url: href });
+          }
+        }
+      }
+    } catch (e) {}
+    if (!eps.length) {
+      for (const a of doc.select("a.btn-episode")) {
+        const href = a.getHref;
+        const name = a.text.trim();
+        if (href && name) eps.push({ name: name, url: href });
+      }
     }
     return {
       name: title,
@@ -147,10 +164,26 @@ class DefaultExtension extends MProvider {
     const res = await new Client().get(full, this.headers());
     if (this.isChallenge(res.statusCode || 200, res.body)) throw new Error("饭团: 需 WebView 过验证后重试");
     const body = res.body;
-    var m = body.match(/"url"\s*:\s*"(https:[^"]*?m3u8[^"]*)"/);
+    // 本站 player_aaaa JSON：url 即直链（encrypt=0 时），别家 CMS 同款字段
+    var m = body.match(/player_aaaa\s*=\s*(\{.*?\})\s*;?\s*<\/script>/s);
+    if (m && m[1]) {
+      try {
+        const data = JSON.parse(m[1]);
+        if (data.url && data.url.indexOf("http") !== -1) {
+          const u = data.url.replace(/\\\//g, "/");
+          const q = (data.from ? data.from + " " : "") + "HLS";
+          const hdrs = { "Referer": full };
+          if (data.url_next && data.url_next.indexOf("http") !== -1) {
+            // 下集直链可用时不额外处理，仅保留当前集
+          }
+          return [{ url: u, originalUrl: u, quality: q.trim(), headers: hdrs }];
+        }
+      } catch (e) {}
+    }
+    m = body.match(/"url"\s*:\s*"(https:[^"]*?m3u8[^"]*)"/);
     if (m && m[1]) {
       const u = m[1].replace(/\\\//g, "/");
-      return [{ url: u, originalUrl: u, quality: "HLS" }];
+      return [{ url: u, originalUrl: u, quality: "HLS", headers: { "Referer": full } }];
     }
     m = body.match(/(https:[^"'\\\s]*?\.m3u8[^"'\\\s]*)/);
     if (m && m[1]) {
