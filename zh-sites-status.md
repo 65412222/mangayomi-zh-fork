@@ -36,17 +36,17 @@
 
 | 站 | 状态 | 备注 |
 |---|---|---|
-| 华为吧 huaweiba.live | LIVE | 2026-10-17复探302(跳转，待跟redirect)，App内点播待验 |
+| 华为吧 huaweiba.live | DOWN | 2026-10-17复探：302跳ww38后超时000(较早前302恶化)，判DOWN |
 | 蜜柑计划 mikanani.me | LIVE | 2026-10-17复探200 |
-| 非凡资源 ffzy.tv | LIVE | ✅ 2026-10-17 API通：/api.php/provide/vod total 98611，pagecount 4931 |
+| 非凡资源 ffzy.tv | LIVE | ✅ 2026-10-17 API通：/api.php/provide/vod total 98613，detail直给m3u8(feifan/ffm3u8双线路) |
 | 玩偶哥哥 wogg.one | LIVE | 2026-10-17复探200，App内点播待验 |
-| 极速资源 jisuzy.com | LIVE | ✅ 2026-10-17 API通：total 113942 |
-| 360资源 360zy.com | LIVE | ✅ 2026-10-17 API通：total 73110，play_from=360zy |
-| 樱花动漫 iyinghua.com | DOWN? | 2026-10-17复探000超时(较10-16恶化)，待换线路/查新域名 |
-| 小米UC mucpan.cc | DOWN | 2026-10-17复探000，搬家新域名未找到(搜索无结果) |
-| 天空资源 tiankongzy.com | DOWN | 2026-10-17复探000；BGM帖称天空资源失效，暂无新地址 |
-| 至臻视觉 mihdr.top | DOWN | 2026-10-17复探000超时 |
-| 多多影音 tv.yydsys.top | DOWN | 2026-10-17复探000超时 |
+| 极速资源 jisuzy.com | LIVE | ✅ 2026-10-17 API通：total 113989，detail给vv.jisuzyv.com播放页(jsyun/jsm3u8双线路，App内需跟播放页取直链) |
+| 360资源 360zy.com | LIVE | ✅ 2026-10-17 API通：total 73165，detail直给vod1.maowushi.com m3u8(play_from=360zy) |
+| 樱花动漫 yinhuadm.cc/net/xyz | LIVE | ✅ 2026-10-17新域名复活(旧iyinghua.com已死000)：三镜同体96KB，搜/vch/词.html→详情/v/数字.html→播放/p/5527-线路-集.html；海贼王1180集3线路；播放经player.mcue.cc+yinhua iframe内AES解密出m3u8(需WebView/复刻decrypt，扩展待写) |
+| 小米UC mucpan.cc | DOWN | 2026-10-17终探：www.mucpan.cc与mucpan.com均000，无新地址，归档 |
+| 天空资源 tiankongzy.com | DOWN | 2026-10-17终探：.com/.net均000；tiankongzy.cc活着但跳urldance域名停靠页，判死，归档 |
+| 至臻视觉 mihdr.top | DOWN | 2026-10-17终探：mihdr.top/.com均000，归档 |
+| 多多影音 tv.yydsys.top | DOWN | 2026-10-17终探：tv.yydsys.top与yydsys.com均000，归档 |
 
 ## 动画NSFW中文 6站
 
@@ -65,11 +65,12 @@
 
 ## 小说NSFW中文
 
-LNReader manifest无nsfw字段，待按站名硬筛。下轮做。
+LNReader manifest 2026-10-17实测305插件：中文7(69shu/ixdzs8/linovel/linovelib/linovelib_tw/novel543/quanben)，nsfw/adult字段筛选中0。结论：小说NSFW中文无现成插件位，要做需按站名单独写Mangayomi novel扩展或另找仓。本轮归档，不硬筛站名碰运气。
 
 ## 下一步（等你拍板）
 
 1. 架子已在 workspace/mangayomi-zh-fork/，push到你GitHub就成可导入仓
 2. 拷贝修头版扩展先写，0.0.25升0.0.26
-3. 动画7活站App内点播验
-4. 小米UC查搬家，天空/至臻/多多查新域名
+3. 动画7活站App内点播验（你手机上做：蜜柑/非凡/极速/360/玩偶/樱花新站；华为吧已判DOWN跳过）
+4. 樱花新站(yinhuadm.cc)写Mangayomi anime扩展：搜→详情→经mcue iframe decrypt取m3u8（setting.js是jsjiami混淆，decrypt需复刻DOM打乱+AES逻辑，或App内走WebView过）
+5. 小米UC/天空/至臻/多多/华为吧已归档，不再追
