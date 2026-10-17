@@ -174,5 +174,27 @@
   "additionalParams": "",
   "sourceCodeLanguage": 1,
   "notes": ""
+ },
+ {
+  "name": "轻之国度",
+  "id": 320000001,
+  "baseUrl": "https://www.lightnovel.fun",
+  "lang": "zh",
+  "typeSource": "single",
+  "iconUrl": "https://www.google.com/s2/favicons?sz=256&domain=https://www.lightnovel.fun",
+  "dateFormat": "",
+  "dateFormatLocale": "",
+  "isNsfw": false,
+  "hasCloudflare": false,
+  "sourceCodeUrl": "https://raw.githubusercontent.com/65412222/mangayomi-zh-fork/main/javascript/novel/src/zh/lightnovel_fun.js",
+  "apiUrl": "",
+  "version": "0.0.1",
+  "isManga": false,
+  "itemType": 2,
+  "isFullData": false,
+  "appMinVerReq": "0.5.0",
+  "additionalParams": "",
+  "sourceCodeLanguage": 1,
+  "notes": "搜索?keyword=已验6本海贼；详情h1+og:image+首卷SSR目录；正文p.ln-paragraph"
  }
 ]
