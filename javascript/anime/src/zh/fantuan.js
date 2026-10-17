@@ -7,7 +7,7 @@ const mangayomiSources = [{
   "typeSource": "single",
   "itemType": 1,
   "isNsfw": false,
-  "version": "0.0.2",
+  "version": "0.0.3",
   "dateFormat": "",
   "dateFormatLocale": "",
   "pkgPath": "anime/src/zh/fantuan.js"
@@ -28,6 +28,24 @@ class DefaultExtension extends MProvider {
 
   getHeaders(url) {
     throw new Error("getHeaders not implemented");
+  }
+
+  headers(referer) {
+    // CF 通修：像浏览器，不手写 Cookie/UA 覆盖
+    return {
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+      "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+      "Referer": referer || (this.baseURL() + "/"),
+      "Upgrade-Insecure-Requests": "1"
+    };
+  }
+  isChallenge(status, body) {
+    if (status !== 403 && status !== 503) return false;
+    if (!body) return false;
+    const b = body.toLowerCase();
+    return b.indexOf("challenge-form") !== -1 || b.indexOf("cf-turnstile") !== -1 ||
+      b.indexOf("challenges.cloudflare.com") !== -1 || b.indexOf("cdn-cgi/challenge-platform") !== -1 ||
+      (b.indexOf("just a moment") !== -1 && b.indexOf("enable javascript") !== -1);
   }
 
   cardList(doc) {
@@ -62,18 +80,16 @@ class DefaultExtension extends MProvider {
   async getPopular(page) {
     // 首页卡片墙（95 卡），leaderboard 页不是 anime-card 结构，不用它
     if (page > 1) return { list: [], hasNextPage: false };
-    const res = await new Client().get(this.baseURL() + "/", {
-      "Referer": this.baseURL() + "/"
-    });
+    const res = await new Client().get(this.baseURL() + "/", this.headers());
+    if (this.isChallenge(res.statusCode || 200, res.body)) throw new Error("饭团: 需 WebView 过验证后重试");
     const doc = new Document(res.body);
     return { list: this.cardList(doc), hasNextPage: false };
   }
 
   async getLatestUpdates(page) {
     if (page > 1) return { list: [], hasNextPage: false };
-    const res = await new Client().get(this.baseURL() + "/ft/recent.html", {
-      "Referer": this.baseURL() + "/"
-    });
+    const res = await new Client().get(this.baseURL() + "/ft/recent.html", this.headers());
+    if (this.isChallenge(res.statusCode || 200, res.body)) throw new Error("饭团: 需 WebView 过验证后重试");
     const doc = new Document(res.body);
     return { list: this.cardList(doc), hasNextPage: false };
   }
@@ -82,17 +98,17 @@ class DefaultExtension extends MProvider {
     // path 风格：/search/关键词.html；?wd= 只回 404 模板页
     const res = await new Client().get(
       this.baseURL() + "/search/" + encodeURIComponent(query) + ".html",
-      { "Referer": this.baseURL() + "/" }
+      this.headers()
     );
+    if (this.isChallenge(res.statusCode || 200, res.body)) throw new Error("饭团: 需 WebView 过验证后重试");
     const doc = new Document(res.body);
     return { list: this.cardList(doc), hasNextPage: false };
   }
 
   async getDetail(url) {
     const full = url.startsWith("http") ? url : this.baseURL() + url;
-    const res = await new Client().get(full, {
-      "Referer": this.baseURL() + "/"
-    });
+    const res = await new Client().get(full, this.headers());
+    if (this.isChallenge(res.statusCode || 200, res.body)) throw new Error("饭团: 需 WebView 过验证后重试");
     const doc = new Document(res.body);
     var title = "";
     try { title = doc.selectFirst("div.detail-anime-title h6").text.trim(); } catch (e) {}
@@ -128,9 +144,8 @@ class DefaultExtension extends MProvider {
 
   async getVideoList(url) {
     const full = url.startsWith("http") ? url : this.baseURL() + url;
-    const res = await new Client().get(full, {
-      "Referer": this.baseURL() + "/"
-    });
+    const res = await new Client().get(full, this.headers());
+    if (this.isChallenge(res.statusCode || 200, res.body)) throw new Error("饭团: 需 WebView 过验证后重试");
     const body = res.body;
     var m = body.match(/"url"\s*:\s*"(https:[^"]*?m3u8[^"]*)"/);
     if (m && m[1]) {

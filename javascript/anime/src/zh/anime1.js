@@ -30,11 +30,28 @@ class DefaultExtension extends MProvider {
     throw new Error("getHeaders not implemented");
   }
 
+  headers(referer) {
+    // CF 通修：像浏览器，不手写 Cookie/UA 覆盖
+    return {
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+      "Accept-Language": "zh-TW,zh;q=0.9,en;q=0.8",
+      "Referer": referer || (this.baseURL() + "/"),
+      "Upgrade-Insecure-Requests": "1"
+    };
+  }
+  isChallenge(status, body) {
+    if (status !== 403 && status !== 503) return false;
+    if (!body) return false;
+    const b = body.toLowerCase();
+    return b.indexOf("challenge-form") !== -1 || b.indexOf("cf-turnstile") !== -1 ||
+      b.indexOf("challenges.cloudflare.com") !== -1 || b.indexOf("cdn-cgi/challenge-platform") !== -1 ||
+      (b.indexOf("just a moment") !== -1 && b.indexOf("enable javascript") !== -1);
+  }
+
   // animelist.json row: [catId, title, status, year, season, extra]
   async fetchList() {
-    const res = await new Client().get(this.baseURL() + "/animelist.json", {
-      "Referer": this.baseURL() + "/"
-    });
+    const res = await new Client().get(this.baseURL() + "/animelist.json", this.headers());
+    if (this.isChallenge(res.statusCode || 200, res.body)) throw new Error("Anime1: 需 WebView 过验证后重试");
     return JSON.parse(res.body);
   }
 
@@ -61,8 +78,9 @@ class DefaultExtension extends MProvider {
   async search(query, page, filters) {
     const res = await new Client().get(
       this.baseURL() + "/?s=" + encodeURIComponent(query),
-      { "Referer": this.baseURL() + "/" }
+      this.headers()
     );
+    if (this.isChallenge(res.statusCode || 200, res.body)) throw new Error("Anime1: 需 WebView 过验证后重试");
     const doc = new Document(res.body);
     const items = [];
     for (const art of doc.select("article")) {
@@ -78,9 +96,8 @@ class DefaultExtension extends MProvider {
 
   async getDetail(url) {
     const full = url.startsWith("http") ? url : this.baseURL() + url;
-    const res = await new Client().get(full, {
-      "Referer": this.baseURL() + "/"
-    });
+    const res = await new Client().get(full, this.headers());
+    if (this.isChallenge(res.statusCode || 200, res.body)) throw new Error("Anime1: 需 WebView 过验证后重试");
     const doc = new Document(res.body);
     // series page: /?cat=ID -> episode list (only <article> scope,
     // page also contains recent-posts sidebar, must not mix in)
@@ -125,9 +142,8 @@ class DefaultExtension extends MProvider {
 
   async getVideoList(url) {
     const full = url.startsWith("http") ? url : this.baseURL() + url;
-    const res = await new Client().get(full, {
-      "Referer": this.baseURL() + "/"
-    });
+    const res = await new Client().get(full, this.headers());
+    if (this.isChallenge(res.statusCode || 200, res.body)) throw new Error("Anime1: 需 WebView 过验证后重试");
     const doc = new Document(res.body);
     const video = doc.selectFirst("video");
     if (!video) throw new Error("Anime1: 找不到 video 标签");
