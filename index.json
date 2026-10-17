@@ -12866,5 +12866,28 @@
   "additionalParams": "",
   "sourceCodeLanguage": 1,
   "notes": "与dm5同构：MANGABZ签名+chapterimage.ashx解包已验(海贼王1151话13图接口通)"
+ },
+ {
+  "name": "再漫画",
+  "id": 310000006,
+  "baseUrl": "https://manhua.zaimanhua.com",
+  "lang": "zh",
+  "typeSource": "single",
+  "iconUrl": "https://www.google.com/s2/favicons?sz=256&domain=https://manhua.zaimanhua.com",
+  "dateFormat": "",
+  "dateFormatLocale": "",
+  "isNsfw": false,
+  "hasCloudflare": false,
+  "sourceUrl": "",
+  "sourceCodeUrl": "https://raw.githubusercontent.com/65412222/mangayomi-zh-fork/main/javascript/manga/src/zh/zaimanhua.js",
+  "apiUrl": "https://v4api.zaimanhua.com/app/v1",
+  "version": "0.0.1",
+  "isManga": true,
+  "itemType": 0,
+  "isFullData": false,
+  "appMinVerReq": "0.5.0",
+  "additionalParams": "",
+  "sourceCodeLanguage": 1,
+  "notes": "v4api接口(热门/更新/搜索/详情双层data/章节page_url_hd)已验：为了与你在宇宙行走38话37图200"
  }
 ]
