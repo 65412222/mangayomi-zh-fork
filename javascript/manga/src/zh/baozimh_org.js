@@ -7,7 +7,7 @@ const mangayomiSources = [{
   "typeSource": "single",
   "itemType": 0,
   "isNsfw": false,
-  "version": "0.0.2",
+  "version": "0.0.3",
   "dateFormat": "",
   "dateFormatLocale": "",
   "pkgPath": "manga/src/zh/baozimh_org.js"
@@ -151,7 +151,13 @@ class DefaultExtension extends MProvider {
   }
 
   async getPopular(page) {
-    const url = this.baseURL() + "/manga-genre/hots?page=" + page;
+    const p = page || 1;
+    // 实测 /manga-genre/hots SSR 只有 1 卡(其余 islands 懒加载)；搜索页 /s/海 SSR 30 卡
+    // 热门走搜索通配：中文站搜常见字取榜单效果（别家无此站，无参考，只能实测）
+    const queries = ["海", "王", "神", "魔", "仙"];
+    const q = queries[(p - 1) % queries.length];
+    const pg = Math.floor((p - 1) / queries.length) + 1;
+    const url = this.baseURL() + "/s/" + encodeURIComponent(q) + "?page=" + pg;
     const res = await new Client().get(url, this.headers(this.baseURL() + "/"));
     if (this.isChallenge(res.statusCode || 200, res.body)) throw new Error("包子org: 需 WebView 过验证后重试");
     const doc = new Document(res.body);
@@ -160,7 +166,9 @@ class DefaultExtension extends MProvider {
   }
 
   async getLatestUpdates(page) {
-    const url = this.baseURL() + "/manga?page=" + page;
+    const p = page || 1;
+    // /manga SSR 同样 islands 懒加载；走搜索页分页
+    const url = this.baseURL() + "/s/" + encodeURIComponent("新") + "?page=" + p;
     const res = await new Client().get(url, this.headers(this.baseURL() + "/"));
     if (this.isChallenge(res.statusCode || 200, res.body)) throw new Error("包子org: 需 WebView 过验证后重试");
     const doc = new Document(res.body);
@@ -185,11 +193,32 @@ class DefaultExtension extends MProvider {
     var title = "";
     try { title = doc.selectFirst(".text-xl").text.trim().split("   ")[0].trim(); } catch (e) {}
     var cover = "";
-    try { cover = doc.selectFirst(".object-cover").attr("src") || ""; } catch (e) {}
+    // 详情封面：img.object-cover（实测 class="object-cover rounded-md"，attr 在 Document 里按 object-cover 选）
+    try {
+      var cov = null;
+      try { cov = doc.selectFirst("img.object-cover"); } catch (e) {}
+      if (!cov) {
+        try { cov = doc.selectFirst(".object-cover"); } catch (e) {}
+      }
+      cover = cov ? (cov.attr("src") || "") : "";
+    } catch (e) {}
     var desc = "";
     try {
       const m = doc.selectFirst('meta[name="description"]');
       desc = m ? m.attr("content") : "";
+    } catch (e) {}
+    // 作者 + 分类（实测：作者：</span><a href="/manga-author/aiyou"；類型：</span><a href="/manga-genre/qita"；tag /manga-tag/）
+    var author = "";
+    try {
+      const au = doc.selectFirst('a[href*="/manga-author/"]');
+      author = au ? au.text.trim() : "";
+    } catch (e) {}
+    var genre = [];
+    try {
+      for (const g of doc.select('a[href*="/manga-genre/"], a[href*="/manga-tag/"]')) {
+        const t = g.text.trim().replace(/^#/, "");
+        if (t && genre.indexOf(t) === -1) genre.push(t);
+      }
     } catch (e) {}
     var mid = "";
     try {
@@ -219,8 +248,8 @@ class DefaultExtension extends MProvider {
       name: title,
       imageUrl: cover,
       description: desc,
-      genre: [],
-      author: "",
+      genre: genre,
+      author: author,
       status: 2,
       chapters: chapters
     };
