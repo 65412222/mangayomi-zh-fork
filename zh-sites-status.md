@@ -42,7 +42,7 @@
 | 玩偶哥哥 wogg.one | LIVE | 2026-10-17复探200，App内点播待验 |
 | 极速资源 jisuzy.com | LIVE | ✅ 2026-10-17 API通：total 113989，detail给vv.jisuzyv.com播放页(jsyun/jsm3u8双线路，App内需跟播放页取直链) |
 | 360资源 360zy.com | LIVE | ✅ 2026-10-17 API通：total 73165，detail直给vod1.maowushi.com m3u8(play_from=360zy) |
-| 樱花动漫 yinhuadm.cc/net/xyz | LIVE | ✅ 2026-10-17新域名复活(旧iyinghua.com已死000)：三镜同体96KB，搜/vch/词.html→详情/v/数字.html→播放/p/5527-线路-集.html；海贼王1180集3线路；播放经player.mcue.cc+yinhua iframe内AES解密出m3u8(需WebView/复刻decrypt，扩展待写) |
+| 樱花动漫 yinhuadm.cc/net/xyz | LIVE | ✅ 2026-10-17新域名复活(旧iyinghua.com已死000)：三镜同体96KB，搜/vch/词.html→详情/v/数字.html→播放/p/5527-线路-集.html；海贼王1180集3线路；播放经player.mcue.cc+yinhua iframe内AES解密出m3u8；✅ fork自建310000003 v0.0.1已推(raw 200)：热门36/最新42/搜海贼16/详情3540集3线路Laoz-Bfeng-Diff/解密直出活m3u8(Diff线ffm3u8，App内点播待验) |
 | 小米UC mucpan.cc | DOWN | 2026-10-17终探：www.mucpan.cc与mucpan.com均000，无新地址，归档 |
 | 天空资源 tiankongzy.com | DOWN | 2026-10-17终探：.com/.net均000；tiankongzy.cc活着但跳urldance域名停靠页，判死，归档 |
 | 至臻视觉 mihdr.top | DOWN | 2026-10-17终探：mihdr.top/.com均000，归档 |
