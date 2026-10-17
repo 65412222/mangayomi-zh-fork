@@ -12935,5 +12935,28 @@
   "additionalParams": "",
   "sourceCodeLanguage": 1,
   "notes": "GraphQL匿名全链路已验(对齐yuzono/venera)：热门/更新/搜海賊45/ONE PIECE 230话/210图200；图片有匿名配额，402达上限需登录"
+ },
+ {
+  "name": "拷贝漫画",
+  "id": 310000009,
+  "baseUrl": "https://www.mangacopy.com",
+  "lang": "zh",
+  "typeSource": "single",
+  "iconUrl": "https://www.google.com/s2/favicons?sz=256&domain=https://www.mangacopy.com",
+  "dateFormat": "",
+  "dateFormatLocale": "",
+  "isNsfw": false,
+  "hasCloudflare": false,
+  "sourceUrl": "",
+  "sourceCodeUrl": "https://raw.githubusercontent.com/65412222/mangayomi-zh-fork/main/javascript/manga/src/zh/copymanga.js",
+  "apiUrl": "https://api.mangacopy.com",
+  "version": "0.0.26",
+  "isManga": true,
+  "itemType": 0,
+  "isFullData": false,
+  "appMinVerReq": "0.5.0",
+  "additionalParams": "",
+  "sourceCodeLanguage": 1,
+  "notes": "明文全链路已验(App头)：热门/更新p1p2各16无重合/搜海贼16/海贼王400话/首话209图200；目录走group分页接口，取图直连contents"
  }
 ]
