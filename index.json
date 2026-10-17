@@ -12844,5 +12844,27 @@
   "additionalParams": "",
   "sourceCodeLanguage": 1,
   "notes": "桌面站签名chapterfun.ashx+packer解包已验2图/包；付费章节无签名会报错"
+ },
+ {
+  "name": "Mangabz",
+  "id": 310000005,
+  "baseUrl": "https://mangabz.com",
+  "lang": "zh",
+  "typeSource": "single",
+  "iconUrl": "https://www.google.com/s2/favicons?sz=256&domain=https://mangabz.com",
+  "dateFormat": "",
+  "dateFormatLocale": "",
+  "isNsfw": false,
+  "hasCloudflare": false,
+  "sourceCodeUrl": "https://raw.githubusercontent.com/65412222/mangayomi-zh-fork/main/javascript/manga/src/zh/mangabz.js",
+  "apiUrl": "",
+  "version": "0.0.1",
+  "isManga": true,
+  "itemType": 0,
+  "isFullData": false,
+  "appMinVerReq": "0.5.0",
+  "additionalParams": "",
+  "sourceCodeLanguage": 1,
+  "notes": "与dm5同构：MANGABZ签名+chapterimage.ashx解包已验(海贼王1151话13图接口通)"
  }
 ]
