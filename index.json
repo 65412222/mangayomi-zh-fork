@@ -12814,13 +12814,35 @@
   "hasCloudflare": false,
   "sourceCodeUrl": "https://raw.githubusercontent.com/65412222/mangayomi-zh-fork/main/javascript/manga/src/zh/baozimh_org.js",
   "apiUrl": "https://v2.apikk.top/api/v2",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "isManga": true,
   "itemType": 0,
   "isFullData": false,
   "appMinVerReq": "0.5.0",
   "additionalParams": "",
   "sourceCodeLanguage": 1,
-  "notes": "Astro+v2.apikk.top API，章节J7r/nQ解码已验29图；图片线路照站方getChapter.js映射(line=2走nd2)"
+  "notes": "Astro+v2.apikk.top API，章节J7r/nQ解码已验29图；热门/最新走搜索页SSR；详情作者分类封面已补"
+ },
+ {
+  "name": "动漫屋dm5",
+  "id": 310000004,
+  "baseUrl": "https://www.dm5.com",
+  "lang": "zh",
+  "typeSource": "single",
+  "iconUrl": "https://www.google.com/s2/favicons?sz=256&domain=https://www.dm5.com",
+  "dateFormat": "",
+  "dateFormatLocale": "",
+  "isNsfw": false,
+  "hasCloudflare": false,
+  "sourceCodeUrl": "https://raw.githubusercontent.com/65412222/mangayomi-zh-fork/main/javascript/manga/src/zh/dm5.js",
+  "apiUrl": "",
+  "version": "0.0.1",
+  "isManga": true,
+  "itemType": 0,
+  "isFullData": false,
+  "appMinVerReq": "0.5.0",
+  "additionalParams": "",
+  "sourceCodeLanguage": 1,
+  "notes": "桌面站签名chapterfun.ashx+packer解包已验2图/包；付费章节无签名会报错"
  }
 ]
