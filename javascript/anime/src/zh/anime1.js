@@ -7,7 +7,7 @@ const mangayomiSources = [{
   "typeSource": "single",
   "itemType": 1,
   "isNsfw": false,
-  "version": "0.0.1",
+  "version": "0.0.4",
   "dateFormat": "",
   "dateFormatLocale": "",
   "pkgPath": "anime/src/zh/anime1.js"
@@ -76,22 +76,34 @@ class DefaultExtension extends MProvider {
   }
 
   async search(query, page, filters) {
+    const p = page || 1;
+    // 别家(xptv/tvbox)走 /page/N?s= 分页；之前只拿第一页
     const res = await new Client().get(
-      this.baseURL() + "/?s=" + encodeURIComponent(query),
+      this.baseURL() + "/page/" + p + "?s=" + encodeURIComponent(query),
       this.headers()
     );
     if (this.isChallenge(res.statusCode || 200, res.body)) throw new Error("Anime1: 需 WebView 过验证后重试");
     const doc = new Document(res.body);
     const items = [];
-    for (const art of doc.select("article")) {
-      const a = art.selectFirst("h2.entry-title a");
+    for (const art of doc.select("#main > article")) {
+      // 搜索结果：标题取 entry-footer .cat-links a（系列名），别家 xptv 即此写法
+      var a = null;
+      try { a = art.selectFirst(".entry-footer .cat-links a"); } catch (e) {}
+      if (!a) {
+        try { a = art.selectFirst("h2.entry-title a"); } catch (e) {}
+      }
       if (!a) continue;
       const href = a.getHref;
       const name = a.text.trim();
       if (!href || !name) continue;
       items.push({ name: name, imageUrl: "", link: href });
     }
-    return { list: items, hasNextPage: false };
+    var hasNext = false;
+    try {
+      const np = doc.selectFirst(".nav-previous a, .navigation .nav-previous a");
+      hasNext = !!np;
+    } catch (e) {}
+    return { list: items, hasNextPage: hasNext };
   }
 
   async getDetail(url) {
@@ -99,13 +111,14 @@ class DefaultExtension extends MProvider {
     const res = await new Client().get(full, this.headers());
     if (this.isChallenge(res.statusCode || 200, res.body)) throw new Error("Anime1: 需 WebView 过验证后重试");
     const doc = new Document(res.body);
-    // series page: /?cat=ID -> episode list (only <article> scope,
+    // series page: /?cat=ID -> episode list (only #main > article scope,
     // page also contains recent-posts sidebar, must not mix in)
     if (url.indexOf("?cat=") != -1) {
       var title = "";
       try { title = doc.selectFirst("title").text.trim(); } catch (e) {}
       const eps = [];
-      for (const art of doc.select("article")) {
+      // 别家 tvbox：.site-main article + .video-js data-apireq 取单集签名
+      for (const art of doc.select("#main > article, .site-main article")) {
         const a = art.selectFirst("h2.entry-title a");
         if (!a) continue;
         const href = a.getHref;
@@ -119,6 +132,34 @@ class DefaultExtension extends MProvider {
       const uniq = [];
       for (const e of eps) {
         if (!seen[e.url]) { seen[e.url] = 1; uniq.push(e); }
+      }
+      // 连载页分页：?cat=ID/page/N 追加后续选集
+      var pageN = 2;
+      var moreUrl = full.replace(/\/$/, "") + "/page/" + pageN;
+      var guard = 0;
+      while (guard < 8) {
+        guard++;
+        var mres = null;
+        try {
+          mres = await new Client().get(moreUrl, this.headers(this.baseURL() + "/"));
+        } catch (e) { break; }
+        if (!mres || !mres.body) break;
+        const mdoc = new Document(mres.body);
+        const arts = mdoc.select("#main > article, .site-main article");
+        var added = 0;
+        for (const art of arts) {
+          var aa = null;
+          try { aa = art.selectFirst("h2.entry-title a"); } catch (e) {}
+          if (!aa) continue;
+          const href = aa.getHref;
+          const name = aa.text.trim();
+          if (!href || !name) continue;
+          if (!href.match(/anime1\.me\/\d+\/?$/)) continue;
+          if (!seen[href]) { seen[href] = 1; uniq.push({ name: name, url: href }); added++; }
+        }
+        if (!added) break;
+        pageN++;
+        moreUrl = full.replace(/\/$/, "") + "/page/" + pageN;
       }
       return {
         name: title.replace(" – Anime1.me 動畫線上看", "").replace(" &#8211; Anime1.me 動畫線上看", ""),
@@ -145,9 +186,16 @@ class DefaultExtension extends MProvider {
     const res = await new Client().get(full, this.headers());
     if (this.isChallenge(res.statusCode || 200, res.body)) throw new Error("Anime1: 需 WebView 过验证后重试");
     const doc = new Document(res.body);
-    const video = doc.selectFirst("video");
+    // 别家 tvbox：单集页 .video-js data-apireq
+    var video = null;
+    try { video = doc.selectFirst(".video-js, video"); } catch (e) {}
     if (!video) throw new Error("Anime1: 找不到 video 标签");
     var apireq = video.attr("data-apireq");
+    if (!apireq) {
+      // fallback：整页正则兜底
+      var m0 = res.body.match(/data-apireq="([^"]+)"/);
+      if (m0 && m0[1]) apireq = m0[1];
+    }
     if (!apireq) throw new Error("Anime1: 找不到 data-apireq");
     // data-apireq is urlencoded JSON; decode once for POST body
     var payload = apireq;
@@ -166,7 +214,30 @@ class DefaultExtension extends MProvider {
     }
     var src = data.s[0].src;
     if (src.startsWith("//")) src = "https:" + src;
-    return [{ url: src, originalUrl: src, quality: data.s[0].type || "mp4" }];
+    else if (src.startsWith("/")) src = "https:" + src;
+    // 别家 tvbox/xptv：播放要带 API 回的 e/p/h cookie，否则 403
+    var videoHeaders = { "Referer": full };
+    try {
+      var rawCookie = "";
+      if (apiRes.headers) {
+        for (const k of Object.keys(apiRes.headers)) {
+          if (k.toLowerCase() === "set-cookie") { rawCookie = apiRes.headers[k]; break; }
+        }
+      }
+      if (!rawCookie && apiRes.allHeaders) rawCookie = apiRes.allHeaders;
+      if (rawCookie) {
+        const parts = String(rawCookie).split(/[,;]/);
+        const keep = [];
+        for (const p of parts) {
+          const kv = p.trim().split("=");
+          if (kv.length >= 2 && ["e", "p", "h"].indexOf(kv[0].trim()) !== -1) {
+            keep.push(kv[0].trim() + "=" + kv.slice(1).join("=").trim());
+          }
+        }
+        if (keep.length) videoHeaders["Cookie"] = keep.join("; ");
+      }
+    } catch (e) {}
+    return [{ url: src, originalUrl: src, quality: data.s[0].type || "mp4", headers: videoHeaders }];
   }
 
   getFilterList() { return []; }
