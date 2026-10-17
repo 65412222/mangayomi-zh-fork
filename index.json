@@ -5453,7 +5453,7 @@
   "appMinVerReq": "0.5.0",
   "additionalParams": "",
   "sourceCodeLanguage": 1,
-  "notes": ""
+  "notes": "DOWN 2026-10-17: 503，疑似跑路/换域，待找新域"
  },
  {
   "name": "古风漫画",
@@ -5475,7 +5475,7 @@
   "appMinVerReq": "0.5.0",
   "additionalParams": "",
   "sourceCodeLanguage": 1,
-  "notes": ""
+  "notes": "DOWN 2026-10-17: 直连000/DNS无 http，疑似下线"
  },
  {
   "name": "拷贝漫画",
@@ -5497,7 +5497,7 @@
   "appMinVerReq": "0.5.0",
   "additionalParams": "",
   "sourceCodeLanguage": 1,
-  "notes": ""
+  "notes": "LIVE 2026-10-17: API正常；备胎2025copy.com海外000待定"
  },
  {
   "name": "动漫之家",
@@ -5519,7 +5519,7 @@
   "appMinVerReq": "0.5.0",
   "additionalParams": "",
   "sourceCodeLanguage": 1,
-  "notes": ""
+  "notes": "DOWN 2026-10-17: 直连000/502，疑似弃用"
  },
  {
   "name": "漫画柜",
@@ -5531,7 +5531,7 @@
   "dateFormat": "",
   "dateFormatLocale": "",
   "isNsfw": false,
-  "hasCloudflare": false,
+  "hasCloudflare": true,
   "sourceCodeUrl": "https://raw.githubusercontent.com/entityJY/mangayomi-extensions-eJ/main/javascript/manga/src/zh/manhuagui.js",
   "apiUrl": "",
   "version": "0.0.25",
@@ -5541,7 +5541,7 @@
   "appMinVerReq": "0.5.0",
   "additionalParams": "",
   "sourceCodeLanguage": 1,
-  "notes": ""
+  "notes": "WAF 2026-10-17: PC 403后301到m站，App内需跟跳+UA/或WebView过验证"
  },
  {
   "name": "Oduto - Boruto",
@@ -8061,7 +8061,7 @@
   "dateFormat": "",
   "dateFormatLocale": "",
   "isNsfw": false,
-  "hasCloudflare": false,
+  "hasCloudflare": true,
   "sourceCodeUrl": "https://raw.githubusercontent.com/m2k3a/mangayomi-extensions/main/javascript/manga/src/zh/baozimh.js",
   "apiUrl": "",
   "version": "0.0.1",
@@ -8071,7 +8071,7 @@
   "appMinVerReq": "0.5.0",
   "additionalParams": "",
   "sourceCodeLanguage": 1,
-  "notes": ""
+  "notes": "WAF 2026-10-17: com域403 gatekeeper；新域baozimh.org已出包子漫画org扩展"
  },
  {
   "name": "Olympus Scanlation",
@@ -9512,7 +9512,7 @@
   "dateFormat": "",
   "dateFormatLocale": "",
   "isNsfw": true,
-  "hasCloudflare": false,
+  "hasCloudflare": true,
   "sourceCodeUrl": "https://raw.githubusercontent.com/cgcnl/mangayomi-extensions-red/main/dart/manga/multisrc/madara/madara.dart",
   "apiUrl": "",
   "version": "0.1.15",
@@ -9521,7 +9521,8 @@
   "isFullData": false,
   "appMinVerReq": "0.2.0",
   "additionalParams": "",
-  "sourceCodeLanguage": 0
+  "sourceCodeLanguage": 0,
+  "notes": "WAF 2026-10-17: 403，Madara壳，待切备胎域或WebView过"
  },
  {
   "name": "MangaTop.site",
@@ -12788,7 +12789,7 @@
   "dateFormat": "",
   "dateFormatLocale": "",
   "isNsfw": true,
-  "hasCloudflare": false,
+  "hasCloudflare": true,
   "sourceCodeUrl": "https://raw.githubusercontent.com/cgcnl/mangayomi-extensions-red/main/javascript/manga/src/zh/jmcomic.js",
   "apiUrl": "",
   "version": "0.0.15",
@@ -12797,7 +12798,8 @@
   "isFullData": false,
   "appMinVerReq": "0.2.0",
   "additionalParams": "",
-  "sourceCodeLanguage": 1
+  "sourceCodeLanguage": 1,
+  "notes": "WAF 2026-10-17: CF挡海外IP；分流comic18j-guta.site/work、jmcomic-zzz.one/org待验"
  },
  {
   "name": "包子漫画org",
