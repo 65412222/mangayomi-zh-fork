@@ -6,7 +6,7 @@
 
 | 站 | 状态 | 备注 |
 |---|---|---|
-| 拷贝漫画 mangacopy.com | LIVE | 首页200。API要带duoTuoCartoon UA+platform头，裸调error。扩展0.0.25待修头 |
+| 拷贝漫画 mangacopy.com | LIVE | ✅ fork自建310000009 v0.0.26已推(raw 200)：App头明文全链路，热门/更新p1p2各16无重合/搜海贼16/海贼王400话/首话209图200；目录走group分页，取图contents直连 |
 | 漫画柜 manhuagui.com | WAF | 403，App内过 |
 | 新新漫画 77mh.xyz | DOWN | 503 |
 | 古风漫画 gufengmh.com | DOWN | 直连000 |
@@ -36,17 +36,17 @@
 
 | 站 | 状态 | 备注 |
 |---|---|---|
-| 华为吧 huaweiba.live | LIVE | 200 |
-| 蜜柑计划 mikanani.me | LIVE | 200 |
-| 非凡资源 ffzy.tv | LIVE | 200 |
-| 玩偶哥哥 wogg.one | LIVE | 200 |
-| 极速资源 jisuzy.com | LIVE | 200 |
-| 360资源 360zy.com | LIVE | 200 |
-| 樱花动漫 iyinghua.com | LIVE | http，200 |
-| 小米UC mucpan.cc | DOWN? | 502，疑搬家待查 |
-| 天空资源 tiankongzy.com | PROBE | 000超时 |
-| 至臻视觉 mihdr.top | PROBE | 000超时 |
-| 多多影音 tv.yydsys.top | PROBE | 000超时 |
+| 华为吧 huaweiba.live | LIVE | 2026-10-17复探302(跳转，待跟redirect)，App内点播待验 |
+| 蜜柑计划 mikanani.me | LIVE | 2026-10-17复探200 |
+| 非凡资源 ffzy.tv | LIVE | ✅ 2026-10-17 API通：/api.php/provide/vod total 98611，pagecount 4931 |
+| 玩偶哥哥 wogg.one | LIVE | 2026-10-17复探200，App内点播待验 |
+| 极速资源 jisuzy.com | LIVE | ✅ 2026-10-17 API通：total 113942 |
+| 360资源 360zy.com | LIVE | ✅ 2026-10-17 API通：total 73110，play_from=360zy |
+| 樱花动漫 iyinghua.com | DOWN? | 2026-10-17复探000超时(较10-16恶化)，待换线路/查新域名 |
+| 小米UC mucpan.cc | DOWN | 2026-10-17复探000，搬家新域名未找到(搜索无结果) |
+| 天空资源 tiankongzy.com | DOWN | 2026-10-17复探000；BGM帖称天空资源失效，暂无新地址 |
+| 至臻视觉 mihdr.top | DOWN | 2026-10-17复探000超时 |
+| 多多影音 tv.yydsys.top | DOWN | 2026-10-17复探000超时 |
 
 ## 动画NSFW中文 6站
 
