@@ -7,7 +7,7 @@ const mangayomiSources = [{
   "typeSource": "single",
   "itemType": 0,
   "isNsfw": false,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dateFormat": "",
   "dateFormatLocale": "",
   "pkgPath": "manga/src/zh/baozimh_org.js"
@@ -91,7 +91,19 @@ class DefaultExtension extends MProvider {
     return this.source.baseUrl;
   }
   apiURL() { return this.source.apiUrl; }
-  imgBase() { return "https://c-nd3-1.6wm.top"; }
+  // 图片线路映射：照抄站方 getChapter.js
+  // x={c:{2:"https://c-nd2-1.6wm.top",default:"https://c-nd3-1.6wm.top"},
+  //    t:{2:"https://t-nd2-1.6wm.top",default:"https://t-nd3-1.6wm.top"}}
+  // $(line,route)=line===2?route[2]:route.default，默认 route=c
+  // images.line 由 getinfo 返回（如海之边境 line=2，走 c-nd2-1）
+  imgBase(line) {
+    var routes = {
+      c: { "2": "https://c-nd2-1.6wm.top", "default": "https://c-nd3-1.6wm.top" },
+      t: { "2": "https://t-nd2-1.6wm.top", "default": "https://t-nd3-1.6wm.top" }
+    };
+    var r = routes.c;
+    return (line === 2 || line === "2") ? r["2"] : r["default"];
+  }
 
   headers(referer) {
     // CF 通修：像浏览器，不手写 Cookie/UA 覆盖（kashrtx 修法）
@@ -226,6 +238,7 @@ class DefaultExtension extends MProvider {
     const info = json && json.data && json.data.info;
     if (!info || !info.images) throw new Error("包子org: 章节图片数据为空");
     const raw = info.images.images !== undefined ? info.images.images : info.images;
+    const line = info.images.line !== undefined ? info.images.line : 1;
     var list;
     if (typeof raw === "string") {
       list = decodeChapterImages(raw);
@@ -234,7 +247,7 @@ class DefaultExtension extends MProvider {
     } else {
       throw new Error("包子org: 未知图片数据格式");
     }
-    const base = this.imgBase();
+    const base = this.imgBase(line);
     const out = [];
     for (const it of list) {
       if (it && it.url) out.push(base + it.url);

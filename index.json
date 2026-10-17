@@ -12814,13 +12814,13 @@
   "hasCloudflare": false,
   "sourceCodeUrl": "https://raw.githubusercontent.com/65412222/mangayomi-zh-fork/main/javascript/manga/src/zh/baozimh_org.js",
   "apiUrl": "https://v2.apikk.top/api/v2",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "isManga": true,
   "itemType": 0,
   "isFullData": false,
   "appMinVerReq": "0.5.0",
   "additionalParams": "",
   "sourceCodeLanguage": 1,
-  "notes": "Astro+v2.apikk.top API，章节J7r/nQ解码已验29图"
+  "notes": "Astro+v2.apikk.top API，章节J7r/nQ解码已验29图；图片线路照站方getChapter.js映射(line=2走nd2)"
  }
 ]
