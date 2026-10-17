@@ -2164,5 +2164,27 @@
   "additionalParams": "",
   "sourceCodeLanguage": 1,
   "notes": "animelist.json选番+站内搜索，播放走v.anime1.me/api"
+ },
+ {
+  "name": "樱花动漫(新站)",
+  "id": 310000003,
+  "baseUrl": "https://www.yinhuadm.cc",
+  "lang": "zh",
+  "typeSource": "single",
+  "iconUrl": "https://www.google.com/s2/favicons?sz=256&domain=https://www.yinhuadm.cc",
+  "dateFormat": "",
+  "dateFormatLocale": "",
+  "isNsfw": false,
+  "hasCloudflare": false,
+  "sourceCodeUrl": "https://raw.githubusercontent.com/65412222/mangayomi-zh-fork/main/javascript/anime/src/zh/yinhua.js",
+  "apiUrl": "",
+  "version": "0.0.1",
+  "isManga": false,
+  "itemType": 1,
+  "isFullData": false,
+  "appMinVerReq": "0.5.0",
+  "additionalParams": "",
+  "sourceCodeLanguage": 1,
+  "notes": "yinhuadm.cc/net/xyz三镜像，3线路Laoz/Bfeng/Diff，mcue解密直出m3u8"
  }
 ]
