@@ -82,18 +82,20 @@ class DefaultExtension extends MProvider {
       "Referer": this.baseURL() + "/"
     });
     const doc = new Document(res.body);
-    // series page: /?cat=ID -> episode list
+    // series page: /?cat=ID -> episode list (only <article> scope,
+    // page also contains recent-posts sidebar, must not mix in)
     if (url.indexOf("?cat=") != -1) {
       var title = "";
       try { title = doc.selectFirst("title").text.trim(); } catch (e) {}
       const eps = [];
-      for (const a of doc.select("a")) {
+      for (const art of doc.select("article")) {
+        const a = art.selectFirst("h2.entry-title a");
+        if (!a) continue;
         const href = a.getHref;
-        if (!href) continue;
-        if (href.match(/^https:\/\/anime1\.me\/\d+$/)) {
-          const name = a.text.trim();
-          if (name) eps.push({ name: name, url: href });
-        }
+        const name = a.text.trim();
+        if (!href || !name) continue;
+        if (!href.match(/anime1\.me\/\d+\/?$/)) continue;
+        eps.push({ name: name, url: href });
       }
       // dedupe keep order
       const seen = {};

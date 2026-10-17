@@ -7,7 +7,7 @@ const mangayomiSources = [{
   "typeSource": "single",
   "itemType": 1,
   "isNsfw": false,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dateFormat": "",
   "dateFormatLocale": "",
   "pkgPath": "anime/src/zh/fantuan.js"
@@ -15,11 +15,15 @@ const mangayomiSources = [{
 
 class DefaultExtension extends MProvider {
   baseURL() {
-    const preference = new SharedPreferences();
-    var base_url = preference.get("domain_url");
-    if (!base_url) return this.source.baseUrl;
-    if (base_url.endsWith("/")) base_url = base_url.slice(0, -1);
-    return base_url;
+    try {
+      const preference = new SharedPreferences();
+      var base_url = preference.get("domain_url");
+      if (base_url) {
+        if (base_url.endsWith("/")) base_url = base_url.slice(0, -1);
+        return base_url;
+      }
+    } catch (e) {}
+    return this.source.baseUrl;
   }
 
   getHeaders(url) {
@@ -33,8 +37,17 @@ class DefaultExtension extends MProvider {
       const a = card.selectFirst("a.stretched-link");
       if (!a) continue;
       const href = a.getHref;
-      const name = a.text.trim();
-      if (!href || !name) continue;
+      if (!href) continue;
+      // leaderboard 页 anchor 为空，标题在 p.semibold / img alt 里
+      var name = "";
+      try { name = a.text.trim(); } catch (e) {}
+      if (!name) {
+        try { name = card.selectFirst("p.semibold").text.trim(); } catch (e) {}
+      }
+      if (!name) {
+        try { name = card.selectFirst("img.anime-cover").attr("alt").trim(); } catch (e) {}
+      }
+      if (!name) continue;
       var img = "";
       try {
         const im = card.selectFirst("img.anime-cover");
@@ -47,8 +60,9 @@ class DefaultExtension extends MProvider {
   }
 
   async getPopular(page) {
+    // 首页卡片墙（95 卡），leaderboard 页不是 anime-card 结构，不用它
     if (page > 1) return { list: [], hasNextPage: false };
-    const res = await new Client().get(this.baseURL() + "/ft/leaderboard.html", {
+    const res = await new Client().get(this.baseURL() + "/", {
       "Referer": this.baseURL() + "/"
     });
     const doc = new Document(res.body);
@@ -65,8 +79,9 @@ class DefaultExtension extends MProvider {
   }
 
   async search(query, page, filters) {
+    // path 风格：/search/关键词.html；?wd= 只回 404 模板页
     const res = await new Client().get(
-      this.baseURL() + "/search.html?wd=" + encodeURIComponent(query),
+      this.baseURL() + "/search/" + encodeURIComponent(query) + ".html",
       { "Referer": this.baseURL() + "/" }
     );
     const doc = new Document(res.body);
