@@ -12912,5 +12912,28 @@
   "additionalParams": "",
   "sourceCodeLanguage": 1,
   "notes": "comic/api免登录(comic/info+chapter/v1+旧版chapter/content)已验：武霸乾坤56话19图200；搜索SSR common-comic-item卡"
+ },
+ {
+  "name": "Komiic",
+  "id": 310000008,
+  "baseUrl": "https://komiic.com",
+  "lang": "zh",
+  "typeSource": "single",
+  "iconUrl": "https://www.google.com/s2/favicons?sz=256&domain=https://komiic.com",
+  "dateFormat": "",
+  "dateFormatLocale": "",
+  "isNsfw": false,
+  "hasCloudflare": false,
+  "sourceUrl": "",
+  "sourceCodeUrl": "https://raw.githubusercontent.com/65412222/mangayomi-zh-fork/main/javascript/manga/src/zh/komiic.js",
+  "apiUrl": "https://komiic.com/api/query",
+  "version": "0.0.1",
+  "isManga": true,
+  "itemType": 0,
+  "isFullData": false,
+  "appMinVerReq": "0.5.0",
+  "additionalParams": "",
+  "sourceCodeLanguage": 1,
+  "notes": "GraphQL匿名全链路已验(对齐yuzono/venera)：热门/更新/搜海賊45/ONE PIECE 230话/210图200；图片有匿名配额，402达上限需登录"
  }
 ]
