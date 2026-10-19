@@ -1,6 +1,7 @@
 # App内点播验（2026-10-17，需手机操作）
 
 Mangayomi 导入仓：`65412222/mangayomi-zh-fork` main。
+（2026-10-19 jsdelivr 回验：anime_index.json 200/66861 含 310000003，yinhua.js 200/13709，Browse 刷新即可装）
 
 ## 漫画
 - [ ] 拷贝漫画 310000009：搜海贼王 → 开400话 → 点一话看图是否加载
