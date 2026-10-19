@@ -7,7 +7,7 @@ const mangayomiSources = [{
   "typeSource": "single",
   "itemType": 1,
   "isNsfw": false,
-  "version": "0.0.4",
+  "version": "0.0.5",
   "dateFormat": "",
   "dateFormatLocale": "",
   "pkgPath": "anime/src/zh/fantuan.js"
@@ -79,6 +79,7 @@ class DefaultExtension extends MProvider {
 
   async getPopular(page) {
     // 首页卡片墙（95 卡），leaderboard 页不是 anime-card 结构，不用它
+    // F1(已验 10-19)：首页无 /type/ 分类入口，/type/1-fypage.html 回 404 壳（0 卡），/ft/archive.html 0 卡，分类不做
     if (page > 1) return { list: [], hasNextPage: false };
     const res = await new Client().get(this.baseURL() + "/", this.headers());
     if (this.isChallenge(res.statusCode || 200, res.body)) throw new Error("饭团: 需 WebView 过验证后重试");
@@ -96,6 +97,7 @@ class DefaultExtension extends MProvider {
 
   async search(query, page, filters) {
     // path 风格：/search/关键词.html；?wd= 只回 404 模板页
+    // F2(已验 10-19)：搜索无真翻页。/search/page/2.html 不带关键词回全站（18 卡，与关键词搜 overlap 仅 1），hasNextPage 保持 false，别去翻页
     const res = await new Client().get(
       this.baseURL() + "/search/" + encodeURIComponent(query) + ".html",
       this.headers()
@@ -129,6 +131,7 @@ class DefaultExtension extends MProvider {
     } catch (e) {}
     const eps = [];
     // 多线路分组：tab-pane id=线路一..六，集名前缀[线路X]（别家扁平写法）
+    // F3(已验 10-19)：三详情页 id 均为中文线路一..六（缺号跳过，如 12817 缺三/五/六），前缀逻辑不写死，直接取 id
     try {
       const panes = doc.select("div.tab-pane[id]");
       if (panes && panes.length) {
@@ -165,6 +168,7 @@ class DefaultExtension extends MProvider {
     if (this.isChallenge(res.statusCode || 200, res.body)) throw new Error("饭团: 需 WebView 过验证后重试");
     const body = res.body;
     // 本站 player_aaaa JSON：url 即直链（encrypt=0 时），别家 CMS 同款字段
+    // F4(已验 10-19)：from 为 modum3u8，url 即 m3u8 直链，quality 取 from 原样 + HLS，不另拼
     var m = body.match(/player_aaaa\s*=\s*(\{.*?\})\s*;?\s*<\/script>/s);
     if (m && m[1]) {
       try {

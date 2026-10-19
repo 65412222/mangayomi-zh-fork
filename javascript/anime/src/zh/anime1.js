@@ -7,7 +7,7 @@ const mangayomiSources = [{
   "typeSource": "single",
   "itemType": 1,
   "isNsfw": false,
-  "version": "0.0.4",
+  "version": "0.0.5",
   "dateFormat": "",
   "dateFormatLocale": "",
   "pkgPath": "anime/src/zh/anime1.js"
@@ -49,6 +49,7 @@ class DefaultExtension extends MProvider {
   }
 
   // animelist.json row: [catId, title, status, year, season, extra]
+  // A1(已验 10-19)：站方 og:image 与详情页均只给 sta.anicdn.com/logo/260x260.png 占位，无真实 poster，保持占位图
   async fetchList() {
     const res = await new Client().get(this.baseURL() + "/animelist.json", this.headers());
     if (this.isChallenge(res.statusCode || 200, res.body)) throw new Error("Anime1: 需 WebView 过验证后重试");
@@ -103,7 +104,14 @@ class DefaultExtension extends MProvider {
       const np = doc.selectFirst(".nav-previous a, .navigation .nav-previous a");
       hasNext = !!np;
     } catch (e) {}
-    return { list: items, hasNextPage: hasNext };
+    // A2：搜出来是单集 article，同一系列多集重复，按系列链接去重（cat-links href 即系列代理，无 catId 时按名去重）
+    const seenS = {};
+    const uniqS = [];
+    for (const it of items) {
+      const k = it.link || it.name;
+      if (!seenS[k]) { seenS[k] = 1; uniqS.push(it); }
+    }
+    return { list: uniqS, hasNextPage: hasNext };
   }
 
   async getDetail(url) {
@@ -133,11 +141,13 @@ class DefaultExtension extends MProvider {
       for (const e of eps) {
         if (!seen[e.url]) { seen[e.url] = 1; uniq.push(e); }
       }
-      // 连载页分页：?cat=ID/page/N 追加后续选集
+      // 连载页分页：实测 ?cat=ID/page/N 回 404 空页，真分页是 &paged=N（游戏王 144：p1 107-94，paged=2 给 93-80，每页 14）
+      // A3：guard 8→12，107 集需 8 页，173 集需 13 页，12 盖得住
       var pageN = 2;
-      var moreUrl = full.replace(/\/$/, "") + "/page/" + pageN;
+      var sep = full.indexOf("?") !== -1 ? "&" : "?";
+      var moreUrl = full + sep + "paged=" + pageN;
       var guard = 0;
-      while (guard < 8) {
+      while (guard < 12) {
         guard++;
         var mres = null;
         try {
@@ -159,7 +169,7 @@ class DefaultExtension extends MProvider {
         }
         if (!added) break;
         pageN++;
-        moreUrl = full.replace(/\/$/, "") + "/page/" + pageN;
+        moreUrl = full + sep + "paged=" + pageN;
       }
       return {
         name: title.replace(" – Anime1.me 動畫線上看", "").replace(" &#8211; Anime1.me 動畫線上看", ""),
@@ -187,34 +197,45 @@ class DefaultExtension extends MProvider {
     if (this.isChallenge(res.statusCode || 200, res.body)) throw new Error("Anime1: 需 WebView 过验证后重试");
     const doc = new Document(res.body);
     // 别家 tvbox：单集页 .video-js data-apireq
-    var video = null;
-    try { video = doc.selectFirst(".video-js, video"); } catch (e) {}
-    if (!video) throw new Error("Anime1: 找不到 video 标签");
-    var apireq = video.attr("data-apireq");
-    if (!apireq) {
-      // fallback：整页正则兜底
-      var m0 = res.body.match(/data-apireq="([^"]+)"/);
-      if (m0 && m0[1]) apireq = m0[1];
+    // A4：e/p/h 缺项时重取一次 apireq 再 POST，最多两轮
+    var apiRes = null, data = null, src = "", lastErr = null;
+    for (var attempt = 0; attempt < 2; attempt++) {
+      var pageBody = res.body, pageDoc = doc;
+      if (attempt > 0) {
+        try {
+          const rr = await new Client().get(full, this.headers());
+          if (rr && rr.body) { pageBody = rr.body; pageDoc = new Document(rr.body); }
+        } catch (e) { break; }
+      }
+      var video = null;
+      try { video = pageDoc.selectFirst(".video-js, video"); } catch (e) {}
+      var apireq = video ? video.attr("data-apireq") : null;
+      if (!apireq) {
+        var m0 = pageBody.match(/data-apireq="([^"]+)"/);
+        if (m0 && m0[1]) apireq = m0[1];
+      }
+      if (!apireq) { lastErr = new Error("Anime1: 找不到 data-apireq"); continue; }
+      var payload = apireq;
+      try { payload = decodeURIComponent(apireq); } catch (e) {}
+      const apiUrl = "https://v.anime1.me/api";
+      const headers = {
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "Referer": full,
+        "Origin": this.baseURL()
+      };
+      const client = new Client();
+      try {
+        apiRes = await client.post(apiUrl, headers, { d: payload });
+        data = JSON.parse(apiRes.body);
+      } catch (e) { lastErr = e; continue; }
+      if (!data.s || !data.s.length || !data.s[0].src) { lastErr = new Error("Anime1: API 未返回播放地址"); continue; }
+      src = data.s[0].src;
+      if (src.startsWith("//")) src = "https:" + src;
+      else if (src.startsWith("/")) src = "https:" + src;
+      lastErr = null;
+      break;
     }
-    if (!apireq) throw new Error("Anime1: 找不到 data-apireq");
-    // data-apireq is urlencoded JSON; decode once for POST body
-    var payload = apireq;
-    try { payload = decodeURIComponent(apireq); } catch (e) {}
-    const apiUrl = "https://v.anime1.me/api";
-    const headers = {
-      "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-      "Referer": full,
-      "Origin": this.baseURL()
-    };
-    const client = new Client();
-    const apiRes = await client.post(apiUrl, headers, { d: payload });
-    const data = JSON.parse(apiRes.body);
-    if (!data.s || !data.s.length || !data.s[0].src) {
-      throw new Error("Anime1: API 未返回播放地址");
-    }
-    var src = data.s[0].src;
-    if (src.startsWith("//")) src = "https:" + src;
-    else if (src.startsWith("/")) src = "https:" + src;
+    if (lastErr) throw lastErr;
     // 别家 tvbox/xptv：播放要带 API 回的 e/p/h cookie，否则 403
     var videoHeaders = { "Referer": full };
     try {

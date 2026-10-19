@@ -7,7 +7,7 @@ const mangayomiSources = [{
   "typeSource": "single",
   "itemType": 1,
   "isNsfw": false,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dateFormat": "",
   "dateFormatLocale": "",
   "pkgPath": "anime/src/zh/yinhua.js"
@@ -216,7 +216,8 @@ class DefaultExtension extends MProvider {
     var desc = "";
     var dm = body.match(/module-info-introduction-content"><p>([\s\S]{1,2000}?)<\/p>/);
     if (dm) desc = dm[1].replace(/<[^>]+>/g, "").trim();
-    // 线路：tab 顺序 Laoz/Bfeng/Diff 对应 region 顺序 sid 1/2/3
+    // 线路：tab 顺序 Laoz/Bfeng/Diff；sid 为线路全局编号（实测 Bfeng=1/Laoz=2/Diff=3），tab 名直接用
+    // Y1：Diff 线老集存活率最高，eps 按 Diff 优先排，App 点第一个就是活的
     var tabs = [];
     var tabRe = /data-dropdown-value="([^"]+)"/g, tmg;
     while ((tmg = tabRe.exec(body)) !== null) tabs.push(tmg[1]);
@@ -230,6 +231,12 @@ class DefaultExtension extends MProvider {
         eps.push({ name: "[" + line + "] " + emg[3].trim(), url: emg[1] });
       }
     }
+    // Y1+Y4：Diff 线老集存活率最高，Diff 优先排，App 点第一个就是活的
+    eps.sort(function (a, b) {
+      var pa = a.name.indexOf("[Diff]") === 0 ? 0 : 1;
+      var pb = b.name.indexOf("[Diff]") === 0 ? 0 : 1;
+      return pa - pb;
+    });
     return { name: title, imageUrl: cover, description: desc, genre: [], episodes: eps };
   }
 
@@ -264,6 +271,7 @@ class DefaultExtension extends MProvider {
     var idRe = /id="(now_[A-Za-z0-9]+)"/g, img2;
     while ((img2 = idRe.exec(ibody)) !== null) ids.push(img2[1]);
     var cfgm = ibody.match(/"url":\s*"([A-Za-z0-9+/=]{20,400})"/);
+    // Y4：短 cfg（最新一集站方没 scrap）不会命中上面 20 位下限，直接走下面透传，不当解密 bug 修
     if (ids.length >= 2 && cfgm) {
       try {
         const v1 = ids[1].substring(4), v2 = ids[0].substring(4);
@@ -276,7 +284,11 @@ class DefaultExtension extends MProvider {
         const aesKey = md5.substring(16), iv = md5.substring(0, 16);
         const plain = cryptoHandler(cfgm[1], iv, aesKey, false);
         if (plain && plain.indexOf("http") === 0) {
-          return [{ url: plain, originalUrl: plain, quality: from + " HLS", headers: { "Referer": "https://player.mcue.cc/" } }];
+          // Y2+Y4：直链 + iframe 双源返回，老集 404 时 App 内可手动顺延；短 cfg 解空走下面透传
+          return [
+            { url: plain, originalUrl: plain, quality: from + " HLS", headers: { "Referer": "https://player.mcue.cc/" } },
+            { url: mcue, originalUrl: mcue, quality: "iframe" }
+          ];
         }
       } catch (e) {}
     }
