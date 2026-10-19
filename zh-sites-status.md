@@ -26,7 +26,7 @@
 | 爱下电子书 ixdzs8.com | LIVE | 200直连 |
 | Quanben quanben.io | LIVE | 200直连 |
 | 69书吧 69shu.xyz | WAF | 403 |
-| linovel linovel.net | WAF | 403 |
+| linovel linovel.net | FLAKY | 2026-10-19探针200但12s超时边缘；复验Android/PC UA均25s超时000，偶发200带真标题。App内走WAF/重试逻辑，不稳 |
 | Linovelib bilinovel.com | WAF | 403 |
 | Linovelib繁 tw.linovelib.com | WAF | 跳www后403 |
 | Novel543 novel543.com | WAF | 403 |
@@ -55,7 +55,7 @@
 | Hanime1 hanime1.me | WAF | 403 |
 | Jable jable.tv | WAF | 403，中字漫改 |
 | SupJav supjav.com | WAF | 403 |
-| RouVideo rouvideo.com | WAF | 204 |
+| RouVideo rouvideo.com | REDIRECT | 2026-10-19探针：302跳qemow.com广告页，-L终点204。域名疑似停靠/转卖，不进仓 |
 | MyReadingManga | WAF | 403 |
 | Hanime hanime.tv | WAF | 403 |
 

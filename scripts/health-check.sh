@@ -29,7 +29,7 @@ https://tv.yydsys.top
 https://www.wogg.one
 https://www.jisuzy.com
 https://360zy.com
-http://www.iyinghua.com
+https://www.yinhuadm.cc
 https://hanime1.me
 https://jable.tv
 https://supjav.com
