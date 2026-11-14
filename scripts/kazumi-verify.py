@@ -79,7 +79,7 @@ def run(path, kw):
         sc = d["searchApiConfig"]
         url = sc["request"]["url"]
         qs = "&".join("%s=%s" % (k, urllib.parse.quote(str(v).replace("@keyword", kw)))
-                      for k, v in sc["request"]["query"].items())
+                      for k, v in (sc["request"].get("query") or {}).items())
         raw = get(url + ("&" if "?" in url else "?") + qs, base)
         try:
             js = json.loads(raw)
@@ -111,7 +111,7 @@ def run(path, kw):
             cc = d["chapterApiConfig"]
             url = cc["request"]["url"]
             qs = "&".join("%s=%s" % (k, urllib.parse.quote(str(v).replace("@source", str(h))))
-                          for k, v in cc["request"]["query"].items())
+                          for k, v in (cc["request"].get("query") or {}).items())
             raw = get(url + ("&" if "?" in url else "?") + qs, base)
             try:
                 js = json.loads(raw)

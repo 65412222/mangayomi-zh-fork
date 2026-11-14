@@ -40,6 +40,14 @@
     "lastUpdate": 1786942825000
   },
   {
+    "name": "baimao",
+    "version": "1.0",
+    "useNativePlayer": true,
+    "antiCrawlerEnabled": false,
+    "author": "",
+    "lastUpdate": 1794647905213
+  },
+  {
     "name": "dalvdm",
     "version": "1.2",
     "useNativePlayer": true,

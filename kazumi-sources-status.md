@@ -45,7 +45,7 @@
 | sorani | https://www.sorani.net | 搜索 200，分集接口 404 | DEAD：上游规则过期 |
 | 7sefun | https://www.7sefun.top | 搜索页仅 4.9KB 落地页，0 条目 | DEAD：站点换域名 |
 | aafun | https://www.moonci.com | `chapterRoads` 字段只有 `//` | DEAD：规则本身残缺（同站建议用 moonci） |
-| baimao | https://www.baimaodm.com | 搜索 2 条，详情页 0 个播放链接（JS 渲染） | 未判定：疑需 webview |
+| baimao | https://www.baimaodm.com | 搜索 2 条，详情页可用；`chapterRoads` 是静态位置路径 `//div[2]/div[2]/div[8]/div/div/ul` | **已入仓** → `kazumi-adapted/`（1.0，未改）：来自深渊 13 集 / 觉醒的神秘 11 集 / 学生会 6 集。选择器脆弱，改版即断 |
 | ezdmw | https://m.ezdmw.org | 搜索 1 条（命中公告块），线路 4 但集数 0 | **已适配** → `kazumi-adapted/`（1.3） |
 | mgnacg | https://www.mgnacg.com | 搜索 API 200，无 `sourceTemplate` 且耗 9.3s | PART |
 | xfdmnext | https://next.xifanacg.com | 搜索 API 401 | WAF |
@@ -77,7 +77,7 @@
 | LMM | 第二季 13/12 集 | 无 | 无 |
 | moonci | 黄金乡 12 集 | 条目在、0 集 | 无 |
 | MXdm | 仅剧场版（1 集/部） | 无 | 无 |
-| baimao（未入仓） | 13 集 | 第 1 集（2026 剧场版） | 6 集 × 6 线路 |
+| baimao（已入仓） | 13 集 × 6 线路 | **11 集** | 学生会也有洞！6 集（另有 CM 4 集） |
 | giriGiri | 未判定（delimited 解析限制） | 无 | 未判定 |
 
 三点读法：
@@ -85,6 +85,28 @@
 1. **线路数 ≠ 集数**。DM84 的「6 线路 78 集」是 13 集 × 6 个镜像源，真实集数取「单线路最大值」。
 2. **脑洞学生会 = 学生会也有洞！**，站点按正名收录，直接搜中文别名只有 AGE 命中。
 3. **觉醒的神秘覆盖最差**：2026 年的剧场版，只有 baimao 有第 1 集、dalvdm 有 1 集，其余全无。新番/剧场版这类内容，规则数量帮不上忙。
+
+
+## 第三轮：其余 9 条候选源全量复测
+
+把 `kazumi/` 之外、表里还没定论的上游候选（9 条）用同一套脚本跑 3 个样品，结论是**只有 baimao 值得收**：
+
+| 规则 | 搜索 | 详情/分集 | 判定 |
+|---|---|---|---|
+| baimao | ✅ | 13 集 × 6 线路 | **通过 → 入仓** |
+| AGE | ✅ | 详情页空响应（JS 渲染） | NEEDS_WEBVIEW |
+| mutefun | ❌ 无命中 | — | WAF 403 |
+| 7sefun | ❌ 无命中 | — | DEAD（落地页） |
+| aafun | ✅ | 线路 0（字段残缺 `//`） | DEAD（用 moonci） |
+| mgnacg | ✅ | 线路 0 | PART：缺 `sourceTemplate` |
+| sorani | ✅ API | `api-roads=0`（分集接口 404） | DEAD |
+| xfdmneo | ❌ | — | DEAD（站点迁 next.xifanacg.com） |
+| xfdmnext | ❌ 401 | — | WAF |
+
+顺带修正两处旧结论：
+
+1. **baimao 之前判「疑需 webview」是误判**。它的详情页能直接解析，之前 0 集是样品/超时问题，不是渲染问题。它的 `chapterRoads` 是静态位置路径，现在能跑但改版必断。
+2. **moonci 对「觉醒的神秘」失效**：条目搜得到、线路 0，说明该条目详情页结构与常规番剧不同。同一条规则并非全站通吃。
 
 ## 复现
 

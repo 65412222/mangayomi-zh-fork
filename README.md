@@ -31,7 +31,7 @@ https://gh-proxy.org/https://raw.githubusercontent.com/65412222/mangayomi-zh-for
 | 目录 | 内容 | 地址 |
 |---|---|---|
 | `kazumi/` | 上游逐字节镜像，7 条实测可用 | `.../mangayomi-zh-fork@main/kazumi/` |
-| `kazumi-adapted/` | 加适配的完整目录，9 条（多 TvTFun、ezdmw） | `.../mangayomi-zh-fork@main/kazumi-adapted/` |
+| `kazumi-adapted/` | 加适配的完整目录，10 条（多 TvTFun、ezdmw、baimao） | `.../mangayomi-zh-fork@main/kazumi-adapted/` |
 
 筛选与实测见 `kazumi-sources-status.md`，适配方法与断点分类见 `kazumi-rule-adaptation.md`。上游 86 条里 68 条已标 deprecated，别按条数判断。
 
@@ -47,7 +47,7 @@ kazumi-health.json         Kazumi 站点探针结果
 scripts/kazumi-probe.sh    Kazumi 站点探针脚本
 scripts/kazumi-index.py    由 kazumi/*.json 重建规则索引
 kazumi-sources-status.md   Kazumi 规则实测表（LIVE/PART/WAF/DEAD + 指标）
-kazumi-adapted/            适配版规则目录（9 条，含 TvTFun/ezdmw 修正）
+kazumi-adapted/            适配版规则目录（10 条，含 TvTFun/ezdmw 修正 + baimao）
 kazumi-rule-adaptation.md  规则适配手册（字段语义、六类断点、验证口径）
 scripts/kazumi-diag.py     单条规则断点诊断
 scripts/kazumi-verify.py   规则目录回归（搜索→详情→分集）

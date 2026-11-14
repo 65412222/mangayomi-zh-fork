@@ -69,7 +69,7 @@ def main(catalog, rule, kw):
         sc = d["searchApiConfig"]
         url = sc["request"]["url"]
         qs = "&".join("%s=%s" % (k, urllib.parse.quote(str(v).replace("@keyword", kw)))
-                      for k, v in sc["request"]["query"].items())
+                      for k, v in (sc["request"].get("query") or {}).items())
         raw = get(url + ("&" if "?" in url else "?") + qs, base)
         print("search-api %s -> %dB" % (url[:90], len(raw)))
         try:
