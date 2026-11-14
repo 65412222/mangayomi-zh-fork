@@ -33,6 +33,13 @@ https://gh-proxy.org/https://raw.githubusercontent.com/65412222/mangayomi-zh-for
 | `kazumi/` | 上游逐字节镜像，7 条实测可用 | `.../mangayomi-zh-fork@main/kazumi/` |
 | `kazumi-adapted/` | 加适配的完整目录，10 条（多 TvTFun、ezdmw、baimao） | `.../mangayomi-zh-fork@main/kazumi-adapted/` |
 
+导入地址（`@main` 的 `index.json` 会被 jsDelivr 缓存最多 12 小时，刚推完看不到新规则时改用下面两个）：
+
+```
+https://gh-proxy.org/https://raw.githubusercontent.com/65412222/mangayomi-zh-fork/main/kazumi-adapted/
+https://fastly.jsdelivr.net/gh/65412222/mangayomi-zh-fork@8b6df4f/kazumi-adapted/
+```
+
 筛选与实测见 `kazumi-sources-status.md`，适配方法与断点分类见 `kazumi-rule-adaptation.md`。上游 86 条里 68 条已标 deprecated，别按条数判断。
 
 ## 目录
