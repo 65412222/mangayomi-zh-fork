@@ -40,13 +40,13 @@
 |---|---|---|---|
 | AGE | https://www.agedm.io | 搜索页 curl 403（换桌面 UA 仍 403） | WAF：App 走 webview 可能可用，未证 |
 | mutefun | https://www.mutedm.com | 搜索页 403 | WAF：同上 |
-| xfdmneo | https://dm1.xfdm.pro | 选择器含位置型 XPath，两种解析器结果相反（156 集 / 0 条） | 未判定：需真机复验 |
-| TvTFun | https://www.tvtfun.net | 分集选择器用 `@class*=` 非标准语法，lxml 不支持 | 未判定：需真机复验 |
+| xfdmneo | https://dm1.xfdm.pro | baseURL 已是 Astro 落地页（18KB，正文仅 3 个入口），动漫站迁至 next.xifanacg.com 且其 API 返回 401 | DEAD：站点迁移，规则不可适配 |
+| TvTFun | https://www.tvtfun.net | `@class*=` 非标准语法致分集 0 | **已适配** → `kazumi-adapted/`（1.4） |
 | sorani | https://www.sorani.net | 搜索 200，分集接口 404 | DEAD：上游规则过期 |
 | 7sefun | https://www.7sefun.top | 搜索页仅 4.9KB 落地页，0 条目 | DEAD：站点换域名 |
 | aafun | https://www.moonci.com | `chapterRoads` 字段只有 `//` | DEAD：规则本身残缺（同站建议用 moonci） |
 | baimao | https://www.baimaodm.com | 搜索 2 条，详情页 0 个播放链接（JS 渲染） | 未判定：疑需 webview |
-| ezdmw | https://m.ezdmw.org | 搜索 1 条（命中公告块），线路 4 但集数 0 | PART：选择器半失效 |
+| ezdmw | https://m.ezdmw.org | 搜索 1 条（命中公告块），线路 4 但集数 0 | **已适配** → `kazumi-adapted/`（1.3） |
 | mgnacg | https://www.mgnacg.com | 搜索 API 200，无 `sourceTemplate` 且耗 9.3s | PART |
 | xfdmnext | https://next.xifanacg.com | 搜索 API 401 | WAF |
 
@@ -62,6 +62,29 @@
 | jsDelivr cdn | cdn.jsdelivr.net/gh/…@main/ | 000 失败 |
 
 结论：**默认 direct 在国内基本不可用**，App 里必须切 gitcode 或 ghProxy；自建仓库则直接填 jsDelivr fastly / gh-proxy 前缀地址。
+
+## 换样品复测：来自深渊 / 觉醒的神秘 / 脑洞学生会
+
+第二轮把样品换成这三部，目的是看「同一批规则在长尾番上的覆盖率」，而不是只看链路通不通。命令：`python3 scripts/kazumi-verify.py kazumi-adapted 来自深渊 觉醒的神秘 脑洞学生会`。
+
+| 规则 | 来自深渊（S1 13 集） | 觉醒的神秘 | 脑洞学生会 |
+|---|---|---|---|
+| DM84 | 13 集 × 6 线路（互镜像） | 无 | 学生会也有洞！6 集 × 3 线路 |
+| TvTFun | 13 集 + 黄金乡 12 集 | 无 | 学生会也有洞！6 集 |
+| akianime | 13 集 + 黄金乡 12 集 | 无 | 学生会也有洞！6 集 × 3 线路 |
+| dalvdm | 13 集 × 3 线路 | 1 集 | 无 |
+| ezdmw（适配后） | 13 集 | 无 | 无 |
+| LMM | 第二季 13/12 集 | 无 | 无 |
+| moonci | 黄金乡 12 集 | 条目在、0 集 | 无 |
+| MXdm | 仅剧场版（1 集/部） | 无 | 无 |
+| baimao（未入仓） | 13 集 | 第 1 集（2026 剧场版） | 6 集 × 6 线路 |
+| giriGiri | 未判定（delimited 解析限制） | 无 | 未判定 |
+
+三点读法：
+
+1. **线路数 ≠ 集数**。DM84 的「6 线路 78 集」是 13 集 × 6 个镜像源，真实集数取「单线路最大值」。
+2. **脑洞学生会 = 学生会也有洞！**，站点按正名收录，直接搜中文别名只有 AGE 命中。
+3. **觉醒的神秘覆盖最差**：2026 年的剧场版，只有 baimao 有第 1 集、dalvdm 有 1 集，其余全无。新番/剧场版这类内容，规则数量帮不上忙。
 
 ## 复现
 

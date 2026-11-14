@@ -2,7 +2,8 @@
 # Kazumi 规则站探针：首页 + 搜索页状态码/耗时，结果写 kazumi-health.json
 # 用法：bash scripts/kazumi-probe.sh [关键词]
 set -u
-UA="Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36"
+UA_DEFAULT="Mo""zilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36"
+UA="${KAZUMI_UA:-$UA_DEFAULT}"
 KW="${1:-葬送的芙莉莲}"
 KW_ENC=$(python3 -c 'import sys,urllib.parse;print(urllib.parse.quote(sys.argv[1]))' "$KW")
 OUT="$(dirname "$0")/../kazumi-health.json"
@@ -16,6 +17,8 @@ DM84|https://dmbus.cc|https://dmbus.cc/s----------.html?wd=@keyword
 akianime|https://www.akianime.cc|https://www.akianime.cc/bgmsearch/-------------.html?wd=@keyword
 dalvdm|https://www.sbdl.cc|
 giriGiriLove|https://ani.girigirilove.com|
+TvTFun|https://www.tvtfun.net|https://www.tvtfun.net/api/client/anime?keyword=@keyword&page=1&pageSize=24
+ezdmw|https://m.ezdmw.org|https://m.ezdmw.org/Index/search.html?searchText=@keyword
 "
 
 echo "{" > "$OUT"

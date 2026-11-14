@@ -1,13 +1,13 @@
 {
-  "checked_at": "2026-11-14T07:48:14Z",
+  "checked_at": "2026-11-14T08:04:43Z",
   "keyword": "葬送的芙莉莲",
   "sites": {
-    "MXdm": {"base": "https://www.dcc3.com", "http": "200", "time_s": "2.117966", "search_http": "200", "search_time_s": "0.696451"},
-    "LMM": {"base": "https://www.lmm22.com", "http": "200", "time_s": "1.021437", "search_http": "-", "search_time_s": "-"},
-    "moonci": {"base": "https://www.moonci.com", "http": "200", "time_s": "1.597046", "search_http": "-", "search_time_s": "-"},
-    "DM84": {"base": "https://dmbus.cc", "http": "200", "time_s": "3.355780", "search_http": "200", "search_time_s": "0.839576"},
-    "akianime": {"base": "https://www.akianime.cc", "http": "200", "time_s": "1.948163", "search_http": "200", "search_time_s": "2.393122"},
-    "dalvdm": {"base": "https://www.sbdl.cc", "http": "200", "time_s": "1.720008", "search_http": "-", "search_time_s": "-"},
-    "giriGiriLove": {"base": "https://ani.girigirilove.com", "http": "200", "time_s": "1.189209", "search_http": "-", "search_time_s": "-"}
+    "MXdm": {"base": "https://www.dcc3.com", "http": "200", "time_s": "0.924065", "search_http": "200", "search_time_s": "0.679944"},
+    "LMM": {"base": "https://www.lmm22.com", "http": "200", "time_s": "1.024255", "search_http": "-", "search_time_s": "-"},
+    "moonci": {"base": "https://www.moonci.com", "http": "200", "time_s": "1.498407", "search_http": "-", "search_time_s": "-"},
+    "DM84": {"base": "https://dmbus.cc", "http": "200", "time_s": "1.806025", "search_http": "200", "search_time_s": "0.613680"},
+    "akianime": {"base": "https://www.akianime.cc", "http": "200", "time_s": "3.358405", "search_http": "200", "search_time_s": "1.379314"},
+    "dalvdm": {"base": "https://www.sbdl.cc", "http": "200", "time_s": "2.406917", "search_http": "-", "search_time_s": "-"},
+    "giriGiriLove": {"base": "https://ani.girigirilove.com", "http": "000", "time_s": "12.106377", "search_http": "-", "search_time_s": "-"}
   }
 }
