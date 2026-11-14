@@ -17,6 +17,17 @@ https://raw.githubusercontent.com/65412222/mangayomi-zh-fork/main/anime_index.js
 
 > 状态：索引已合并（漫画592/中文16，动画97/中文14，小说9/中文0），可导入。拷贝修头版待落地。
 
+### Kazumi 番剧规则（另一套 App，同一仓）
+
+Kazumi 走「规则仓库」而不是扩展索引：设置 → 插件/规则 → 规则仓库 → 添加自定义仓库，贴：
+
+```
+https://fastly.jsdelivr.net/gh/65412222/mangayomi-zh-fork@main/kazumi/
+https://gh-proxy.org/https://raw.githubusercontent.com/65412222/mangayomi-zh-fork/main/kazumi/
+```
+
+7 条实时可用的国内番剧规则（MXdm / LMM / moonci / DM84 / akianime / dalvdm / giriGiri），筛选与实测见 `kazumi-sources-status.md`。上游 86 条里 68 条已标 deprecated，别按条数判断。
+
 ## 目录
 
 ```
@@ -24,6 +35,11 @@ javascript/manga/src/zh/   中文漫画修补（拷贝修头版、包子、如�
 javascript/novel/src/zh/   中文小说自写（轻小说文库起手）
 javascript/anime/src/zh/   中文动画对位 + Emby 桥接模板
 index.json / novel_index.json / anime_index.json   合并生成的索引
+kazumi/                    Kazumi 番剧规则仓（index.json + 7 条实测规则 + 上游许可）
+kazumi-health.json         Kazumi 站点探针结果
+scripts/kazumi-probe.sh    Kazumi 站点探针脚本
+scripts/kazumi-index.py    由 kazumi/*.json 重建规则索引
+kazumi-sources-status.md   Kazumi 规则实测表（LIVE/PART/WAF/DEAD + 指标）
 health.json                 存活探针结果（脚本每日更新）
 scripts/health-check.sh     curl 探针脚本
 zh-sites-status.md          中文站重排表（LIVE/WAF/DOWN/PROBE）

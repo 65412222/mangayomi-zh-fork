@@ -1,0 +1,58 @@
+[
+  {
+    "name": "DM84",
+    "version": "1.4",
+    "useNativePlayer": true,
+    "antiCrawlerEnabled": false,
+    "author": "",
+    "lastUpdate": 1770015787000
+  },
+  {
+    "name": "LMM",
+    "version": "2.4",
+    "useNativePlayer": true,
+    "antiCrawlerEnabled": false,
+    "author": "",
+    "lastUpdate": 1794554226000
+  },
+  {
+    "name": "MXdm",
+    "version": "2.4",
+    "useNativePlayer": true,
+    "antiCrawlerEnabled": false,
+    "author": "",
+    "lastUpdate": 1790853597000
+  },
+  {
+    "name": "akianime",
+    "version": "1.4",
+    "useNativePlayer": true,
+    "antiCrawlerEnabled": false,
+    "author": "",
+    "lastUpdate": 1786942825000
+  },
+  {
+    "name": "dalvdm",
+    "version": "1.2",
+    "useNativePlayer": true,
+    "antiCrawlerEnabled": false,
+    "author": "",
+    "lastUpdate": 1792049112000
+  },
+  {
+    "name": "giriGiriLove",
+    "version": "2.7",
+    "useNativePlayer": true,
+    "antiCrawlerEnabled": false,
+    "author": "",
+    "lastUpdate": 1794578485000
+  },
+  {
+    "name": "moonci",
+    "version": "1.1",
+    "useNativePlayer": true,
+    "antiCrawlerEnabled": false,
+    "author": "",
+    "lastUpdate": 1792401354000
+  }
+]
